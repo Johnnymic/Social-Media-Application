@@ -151,29 +151,29 @@ public class CommentServiceImplTest {
     }
 
 
-//    @Test
-//    public void editComment_ValidRequest_ReturnsEditCommentResponse() {
-//        // Arrange
-//        long commentId = 1L;
-//        EditCommentRequest editCommentRequest = new EditCommentRequest();
-//        editCommentRequest.setContent("Updated content");
-//
-//        Comment comment = new Comment();
-//        comment.setId(commentId);
-//
-//        // Mock the commentRepository to return the comment when provided with the commentId
-//        when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
-//        when(commentRepository.save(any(Comment.class))).thenReturn(comment);
-//
-//        // Act
-//        EditCommentResponse result = commentService.editComment(commentId, editCommentRequest);
-//
-//        // Assert
-//        assertNotNull(result);
-//        assertEquals(comment, result.getComment());
-//        assertEquals(editCommentRequest.getContent(), result.getComment());
-//        // Add additional assertions based on the expected behavior
-//    }
+    @Test
+    public void editComment_ValidRequest_ReturnsEditCommentResponse() {
+        // Arrange
+        long commentId = 1L;
+        EditCommentRequest editCommentRequest = new EditCommentRequest();
+        editCommentRequest.setContent("Updated content");
+
+        Comment comment = new Comment();
+        comment.setId(commentId);
+
+        // Mock the commentRepository to return the comment when provided with the commentId
+        when(commentRepository.findById(commentId)).thenReturn(Optional.of(comment));
+        when(commentRepository.save(any(Comment.class))).thenReturn(comment);
+
+        // Act
+        EditCommentResponse result = commentService.editComment(commentId, editCommentRequest);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(comment, result.getComment());
+        assertEquals(editCommentRequest.getContent(), result.getComment());
+        // Add additional assertions based on the expected behavior
+    }
 
 
 //    @Test

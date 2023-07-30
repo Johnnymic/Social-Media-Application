@@ -65,61 +65,8 @@ class UserServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-//    @Test
-//    void editUserProfile_ValidRequest_ReturnsEditUserProfileResponse() {
-//        // Arrange
-//        EditUserProfileRequest editUserProfileRequest = new EditUserProfileRequest();
-//        editUserProfileRequest.setUsername("TestUser");
-//        editUserProfileRequest.setProfilePic("https://example.com/test.jpg");
-//
-//        User loginUser = new User();
-//        loginUser.setEmail("test@example.com");
-//        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(loginUser));
-//
-//        // Act
-//        EditUserProfileResponse result = userService.editUserProfile(editUserProfileRequest);
-//
-//        // Assert
-//        assertNotNull(result);
-//        assertEquals("TestUser", result.getUsername());
-//        assertEquals("https://example.com/test.jpg", result.getProfilePic());
-//    }
 
 
-//    @Test
-//    void editUserProfile_UserNotAuthenticated_ThrowsUserNotAuthenticatedException() {
-//        // Arrange
-//        EditUserProfileRequest editUserProfileRequest = new EditUserProfileRequest();
-//        editUserProfileRequest.setUsername("TestUser");
-//        editUserProfileRequest.setProfilePic("https://example.com/test.jpg");
-//
-//        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-//
-//        // Act & Assert
-//        assertThrows(UserNotAuthenticated.class, () -> userService.editUserProfile(editUserProfileRequest));
-//    }
-
-//    @Test
-//    void viewUserProfile_ValidUserId_ReturnsUserProfileResponse() {
-//        // Arrange
-//        Long userId = 1L;
-//        User user = new User();
-//        user.setId(userId);
-//        user.setUsername("TestUser");
-//        user.setEmail("test@example.com");
-//        user.setProfilePic("https://example.com/test.jpg");
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//
-//        // Act
-//        UserProfileResponse result = userService.viewUserProfile(userId);
-//
-//        // Assert
-//        assertNotNull(result);
-//        assertEquals(userId, result.getUserId());
-//        assertEquals("TestUser", result.getUsername());
-//        assertEquals("test@example.com", result.getEmail());
-//        assertEquals("https://example.com/test.jpg", result.getProfilePic());
-//    }
 
     @Test
     void viewUserProfile_InvalidUserId_ThrowsResourceNotFoundException() {
@@ -131,62 +78,7 @@ class UserServiceImplTest {
         assertThrows(ResourceNotFoundException.class, () -> userService.viewUserProfile(userId));
     }
 
-//    @Test
-//    void viewAllUserProfile_ReturnsListOfUserProfileResponse() {
-//        // Arrange
-//        List<User> users = new ArrayList<>();
-//        User user1 = new User();
-//        user1.setId(1L);
-//        user1.setUsername("TestUser1");
-//        user1.setEmail("test1@example.com");
-//        user1.setProfilePic("https://example.com/test1.jpg");
-//        users.add(user1);
-//
-//        User user2 = new User();
-//        user2.setId(2L);
-//        user2.setUsername("TestUser2");
-//        user2.setEmail("test2@example.com");
-//        user2.setProfilePic("https://example.com/test2.jpg");
-//        users.add(user2);
-//
-//        when(userRepository.findAll()).thenReturn(users);
-//
-//        // Act
-//        List<UserProfileResponse> result = userService.viewAllUserProfile();
-//
-//        // Assert
-//        assertNotNull(result);
-//        assertEquals(2, result.size());
-//
-//        // Assert individual UserProfileResponse objects
-//        UserProfileResponse userProfile1 = result.get(0);
-//        assertEquals(1L, userProfile1.getUserId());
-//        assertEquals("TestUser1", userProfile1.getUsername());
-//        assertEquals("test1@example.com", userProfile1.getEmail());
-//        assertEquals("https://example.com/test1.jpg", userProfile1.getProfilePic());
-//
-//        UserProfileResponse userProfile2 = result.get(1);
-//        assertEquals(2L, userProfile2.getUserId());
-//        assertEquals("TestUser2", userProfile2.getUsername());
-//        assertEquals("test2@example.com", userProfile2.getEmail());
-//        assertEquals("https://example.com/test2.jpg", userProfile2.getProfilePic());
-//    }
 
-//    @Test
-//    void deleteUserProfile_ValidUserId_DeletesUserProfileSuccessfully() {
-//        // Arrange
-//        Long userId = 1L;
-//        User user = new User();
-//        user.setId(userId);
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//
-//        // Act
-//        String result = userService.deleteUserProfile(userId);
-//
-//        // Assert
-//        assertEquals("user profile deleted successful", result);
-//        verify(userRepository, times(1)).delete(user);
-//    }
 
     @Test
     void deleteUserProfile_InvalidUserId_ThrowsResourceNotFoundException() {
@@ -199,31 +91,31 @@ class UserServiceImplTest {
         verify(userRepository, never()).delete(any(User.class));
     }
 
-//    @Test
-//    void toggleFollow_UserAndFollowingUsersExistAndUserAlreadyFollows_FollowRelationshipDeletedSuccessfully() {
-//        // Arrange
-//        Long followerEmailId = 1L;
-//        Long followingEmailId = 2L;
-//        String emailFromContent = "test@example.com";
-//
-//        User followerUser = new User();
-//        followerUser.setId(followerEmailId);
-//        followerUser.setEmail(emailFromContent);
-//
-//        User followingUser = new User();
-//        followingUser.setId(followingEmailId);
-//
-//        Follow follower = new Follow();
-//        follower.setFollower(followerUser);
-//        follower.setFollowing(followingUser);
-//
-//        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followerEmailId))).thenReturn(followerUser);
-//        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followingEmailId))).thenReturn(followingUser);
-//        when(followerRepository.findByFollowerAndFollowing(any(User.class), any(User.class))).thenReturn(follower);
-//
-//        // Act
-//        String result = userService.toggleFollow(followerEmailId, followingEmailId);
-//
-//    }
+    @Test
+    void toggleFollow_UserAndFollowingUsersExistAndUserAlreadyFollows_FollowRelationshipDeletedSuccessfully() {
+        // Arrange
+        Long followerEmailId = 1L;
+        Long followingEmailId = 2L;
+        String emailFromContent = "test@example.com";
+
+        User followerUser = new User();
+        followerUser.setId(followerEmailId);
+        followerUser.setEmail(emailFromContent);
+
+        User followingUser = new User();
+        followingUser.setId(followingEmailId);
+
+        Follow follower = new Follow();
+        follower.setFollower(followerUser);
+        follower.setFollowing(followingUser);
+
+        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followerEmailId))).thenReturn(followerUser);
+        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followingEmailId))).thenReturn(followingUser);
+        when(followerRepository.findByFollowerAndFollowing(any(User.class), any(User.class))).thenReturn(follower);
+
+        // Act
+        String result = userService.toggleFollow(followerEmailId, followingEmailId);
+
+    }
 
 }

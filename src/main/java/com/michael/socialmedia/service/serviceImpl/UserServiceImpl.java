@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -83,6 +84,7 @@ public class UserServiceImpl implements UserService {
            return "user profile deleted successful";
     }
 
+    @Transactional
     @Override
     public String toggleFollow(Long followerEmailId, Long followingEmailId) {
         User followerUser = userRepository.findByEmailAndId(EmailUtils.getEmailFromContent(),followerEmailId);
@@ -105,9 +107,12 @@ public class UserServiceImpl implements UserService {
             newFollow.setFollower(followerUser);
 
             newFollow.setFollowing(followingUser);
-            userRepository.save(followerUser);
-            userRepository.save(followingUser);
-            followerRepository.save(newFollow); // Save the new follow relationship
+
+
+
+            followerRepository.save(newFollow);
+
+            // Save the new follow relationship
             return "User followed successfully";
         }
 

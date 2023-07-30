@@ -99,49 +99,49 @@ public class AuthControllerTest {
 // ... (existing code)
 
 
-//    public void testUserLogin() throws Exception {
-//        // Arrange
-//
-//
-//        // You should create a test user in the UserRepository for this test case
-//        // For this example, let's assume the test user is created with the following details
-//        String email = "testuser@example.com";
-//        String password = "testpassword";
-//        String encodedPassword = "encoded_testpassword";
-//
-//        String accessToken = "test_access_token";
-//        String refreshToken = "test_refresh_token";// Encode the password using the passwordEncoder bean
-//        LoginRequest loginRequest = new LoginRequest(email, password);
-//        User testUser = new User();
-//        testUser.setEmail(email);
-//        testUser.setPassword(password);
-//        when(userRepository.findByEmail(email)).thenReturn(Optional.of(testUser));
-//        when(passwordEncoder.matches(password,encodedPassword )).thenReturn(true);
-//
-//       // AuthenticationService authenticationService = Mockito.mock(AuthenticationService.class);
-//        // Create a controller instance with the mock service
-//        AuthController authController = new AuthController(authenticationService);
-//
-//        when(authenticationService.loginUser(loginRequest)).thenReturn(
-//                new LoginResponse(accessToken, refreshToken)
-//        );
-//
-//        // Act
-//        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/api/v1/auth/login/user")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(loginRequest)))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andReturn();
-//
-//        // Assert
-//        String responseContent = mvcResult.getResponse().getContentAsString();
-//        ApiResponse<LoginResponse> apiResponse = objectMapper.readValue(responseContent, new TypeReference<>() {});
-//
-//        // Check if the response contains an access token and refresh token
-//        assertNotNull(apiResponse.getData());
-//        assertNotNull(apiResponse.getData().getAccessToken());
-//        assertNotNull(apiResponse.getData().getRefreshToken());
-//    }
+    public void testUserLogin() throws Exception {
+        // Arrange
+
+
+        // You should create a test user in the UserRepository for this test case
+        // For this example, let's assume the test user is created with the following details
+        String email = "testuser@example.com";
+        String password = "testpassword";
+        String encodedPassword = "encoded_testpassword";
+
+        String accessToken = "test_access_token";
+        String refreshToken = "test_refresh_token";// Encode the password using the passwordEncoder bean
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        User testUser = new User();
+        testUser.setEmail(email);
+        testUser.setPassword(password);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(testUser));
+        when(passwordEncoder.matches(password,encodedPassword )).thenReturn(true);
+
+       // AuthenticationService authenticationService = Mockito.mock(AuthenticationService.class);
+        // Create a controller instance with the mock service
+        AuthController authController = new AuthController(authenticationService);
+
+        when(authenticationService.loginUser(loginRequest)).thenReturn(
+                new LoginResponse(accessToken, refreshToken)
+        );
+
+        // Act
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/v1/auth/login/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        // Assert
+        String responseContent = mvcResult.getResponse().getContentAsString();
+        ApiResponse<LoginResponse> apiResponse = objectMapper.readValue(responseContent, new TypeReference<>() {});
+
+        // Check if the response contains an access token and refresh token
+        assertNotNull(apiResponse.getData());
+        assertNotNull(apiResponse.getData().getAccessToken());
+        assertNotNull(apiResponse.getData().getRefreshToken());
+    }
 
 }

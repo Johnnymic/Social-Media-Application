@@ -18,10 +18,12 @@ public class Follow  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-     @ManyToOne
-     private  User follower;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "follower_user_id")
+    private User follower;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "following_user_id")
     private User following;
     @Override
     public boolean equals(Object o) {
