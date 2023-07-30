@@ -9,7 +9,7 @@ import java.util.Objects;
 @Getter
 @Setter
 
-@Table(name = "appUser")
+@Table(name = "follower")
 @Entity
 @NoArgsConstructor
 
