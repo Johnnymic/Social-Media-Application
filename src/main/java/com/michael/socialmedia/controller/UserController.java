@@ -1,14 +1,20 @@
 package com.michael.socialmedia.controller;
 
+
+import com.michael.socialmedia.domain.User;
+import com.michael.socialmedia.dto.request.CommentOnPostRequest;
 import com.michael.socialmedia.dto.request.EditUserProfileRequest;
 import com.michael.socialmedia.dto.response.ApiResponse;
+import com.michael.socialmedia.dto.response.CommentOnPostResponse;
 import com.michael.socialmedia.dto.response.EditUserProfileResponse;
 import com.michael.socialmedia.dto.response.UserProfileResponse;
 import com.michael.socialmedia.service.UserService;
+import com.michael.socialmedia.utils.UserPage;
+import com.michael.socialmedia.utils.UserSearchCriteria;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +58,30 @@ public class UserController {
       ApiResponse<String>apiResponse = new ApiResponse<>(userService.toggleFollow(followerUser,followingUser));
       return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
   }
+
+  @PostMapping("/comment/post")
+  public ResponseEntity<ApiResponse<CommentOnPostResponse>> commentOnPost(@RequestBody CommentOnPostRequest comment){
+      ApiResponse<CommentOnPostResponse>apiResponse = new ApiResponse<>(userService.commentOnPost(comment));
+      return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
+  }
+
+  @PostMapping("/comment/{commentId}/remove/post/{postId}")
+  public ResponseEntity<ApiResponse<String>> removeCommentFromPost(@PathVariable("commentId") Long commentId, @PathVariable("postId") Long postId){
+      ApiResponse<String>apiResponse = new ApiResponse<>(userService.removeCommentFromPost(commentId,postId));
+      return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
+  }
+
+  @GetMapping("/filter/search")
+  public  ResponseEntity<ApiResponse <Page<User>>>filterAllUser(UserPage userPage, UserSearchCriteria userSearchCriteria){
+
+      ApiResponse<Page<User>> apiResponse =new ApiResponse<>(userService.filterAndSearch(userPage,userSearchCriteria));
+
+      return  new ResponseEntity<>(apiResponse,HttpStatus.OK);
+  }
+
+
+
+
 
 
 

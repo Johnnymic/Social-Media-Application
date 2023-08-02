@@ -17,12 +17,10 @@ public class Follow  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
      @ManyToOne
-     @JoinColumn(name = "user_id")
-     private  User following;
+     private  User follower;
 
     @ManyToOne
-    @JoinColumn(name = "follower_id")
-    private User follower;
+    private User following;
 
 
 

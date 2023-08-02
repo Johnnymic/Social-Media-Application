@@ -1,18 +1,26 @@
 package com.michael.socialmedia.service.serviceImpl;
 
+import com.michael.socialmedia.domain.Comment;
 import com.michael.socialmedia.domain.Follow;
+import com.michael.socialmedia.domain.Post;
 import com.michael.socialmedia.domain.User;
+import com.michael.socialmedia.dto.request.CommentOnPostRequest;
 import com.michael.socialmedia.dto.request.EditUserProfileRequest;
+import com.michael.socialmedia.dto.response.CommentOnPostResponse;
 import com.michael.socialmedia.dto.response.EditUserProfileResponse;
 import com.michael.socialmedia.dto.response.UserProfileResponse;
+import com.michael.socialmedia.exceptions.CommentNotFoundException;
+import com.michael.socialmedia.exceptions.PostNotfoundException;
 import com.michael.socialmedia.exceptions.ResourceNotFoundException;
 import com.michael.socialmedia.exceptions.UserNotAuthenticated;
-import com.michael.socialmedia.repository.FollowerRepository;
-import com.michael.socialmedia.repository.UserRepository;
+import com.michael.socialmedia.repository.*;
 import com.michael.socialmedia.service.UserService;
 import com.michael.socialmedia.utils.EmailUtils;
 import com.michael.socialmedia.utils.Mapper;
+import com.michael.socialmedia.utils.UserPage;
+import com.michael.socialmedia.utils.UserSearchCriteria;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +35,11 @@ public class UserServiceImpl implements UserService {
 
     private  final FollowerRepository followerRepository;
 
+    private  final PostRepository postRepository;
+
+    private final CommentRepository commentRepository;
+
+    private final UserCriteriaRepository userCriteriaRepository;
 
     @Override
     public EditUserProfileResponse editUserProfile(EditUserProfileRequest editUserProfileRequest) {
@@ -88,7 +101,40 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public CommentOnPostResponse commentOnPost(CommentOnPostRequest comment) {
+        User loginUser = userRepository.findByEmail(EmailUtils.getEmailFromContent())
+                .orElseThrow(()-> new UserNotAuthenticated("user not authenticated"));
+        Post existingPost =postRepository.findById(comment.getPostId())
+                .orElseThrow(()-> new PostNotfoundException("post not found"));
+        Comment commentPost  = new Comment();
+        commentPost.setContent(comment.getCommentContent());
+        commentPost.setUser(loginUser);
+        existingPost.getComments().add(commentPost);
+        postRepository.save(existingPost);
+      var newComment=  commentRepository.save(commentPost);
+        return CommentOnPostResponse.builder()
+                .postId(newComment.getPost().getId())
+                .comment(newComment.getContent())
+                .build();
+    }
 
+    @Override
+    public String removeCommentFromPost(Long commentId, Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotfoundException("Post not found"));
+        Comment comment = post.getComments().stream()
+                .filter(comment1 -> comment1.getId().equals(commentId))
+                .findFirst().orElseThrow(()-> new CommentNotFoundException("comment not found"));
+        post.getComments().remove(comment);
+        return "comment successfully removed from post";
+    }
+
+    @Override
+    public Page<User> filterAndSearch(UserPage userPage,UserSearchCriteria userSearchCriteria) {
+      return  userCriteriaRepository.findAllUserWithFilter(userPage,userSearchCriteria);
+
+    }
 
 
     public UserProfileResponse mapToUserProfile(User user) {
