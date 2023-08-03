@@ -1,15 +1,16 @@
 package com.michael.socialmedia.dto.request;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
-
-@Setter
-@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class RegisterRequest {
-    private Long id;
+@Getter
+@Setter
+public class EditUserProfileRequest {
     private  String username;
 
     private String password;
@@ -18,4 +19,5 @@ public class RegisterRequest {
 
 
     private  String profilePic;
+
 }

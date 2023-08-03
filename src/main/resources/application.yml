@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/socialmediaDb
+    url: jdbc:postgresql://localhost:5432/socialDb
     password: 123456789
     username: postgres
   jpa:

@@ -7,10 +7,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegisterResponse {
-
-
+public class UserProfileResponse {
     private  String username;
+
     private  String email;
+
     private  String profilePic;
 }

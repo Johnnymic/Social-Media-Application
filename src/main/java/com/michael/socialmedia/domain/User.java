@@ -15,7 +15,7 @@ import java.util.*;
 @Getter
 @Setter
 @Builder
-
+@Table(name = "appUser")
 public class User extends BaseEntity implements UserDetails {
 
     @Id
@@ -25,14 +25,21 @@ public class User extends BaseEntity implements UserDetails {
 
     private String password;
 
-    private  String email;
+    private  String  email;
 
 
     private  String profilePic;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Post> reviews;
+    private Set<Post> post;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Follower> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+    private List<Follower> following = new ArrayList<>();
+
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -51,7 +58,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

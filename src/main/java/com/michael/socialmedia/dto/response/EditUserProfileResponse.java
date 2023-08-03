@@ -7,10 +7,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegisterResponse {
-
-
+public class EditUserProfileResponse {
     private  String username;
+
+    private String password;
+
     private  String email;
+
+
     private  String profilePic;
 }
