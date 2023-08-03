@@ -97,6 +97,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     });
             tokenRepository.saveAll(tokenValid);
         }
+
+
     public  User mapToEntity(RegisterRequest registerRequest) {
         return User.builder()
                 .username(registerRequest.getUsername())

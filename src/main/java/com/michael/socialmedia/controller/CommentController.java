@@ -1,5 +1,6 @@
 package com.michael.socialmedia.controller;
 
+import com.michael.socialmedia.dto.request.CommentRequest;
 import com.michael.socialmedia.dto.request.EditCommentRequest;
 import com.michael.socialmedia.dto.response.ApiResponse;
 import com.michael.socialmedia.dto.response.CommentResponse;
@@ -21,7 +22,7 @@ public class CommentController {
     private  final CommentService commentService;
 
     @PostMapping("/create/new/comment")
-    public ResponseEntity<ApiResponse<CommentResponse>>createComment(@RequestBody CommentResponse comment){
+    public ResponseEntity<ApiResponse<CommentResponse>>createComment(@RequestBody CommentRequest comment){
         ApiResponse<CommentResponse> apiResponse = new ApiResponse<>(commentService.createNewComment(comment));
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
 

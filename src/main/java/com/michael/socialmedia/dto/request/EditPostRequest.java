@@ -1,10 +1,12 @@
 package com.michael.socialmedia.dto.request;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Builder
-@Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
 public class EditPostRequest {
     private String content;
 }

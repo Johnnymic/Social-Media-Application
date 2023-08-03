@@ -2,15 +2,20 @@ package com.michael.socialmedia.service.serviceImpl;
 
 import com.michael.socialmedia.domain.Comment;
 import com.michael.socialmedia.domain.Post;
+import com.michael.socialmedia.domain.User;
+import com.michael.socialmedia.dto.request.CommentRequest;
 import com.michael.socialmedia.dto.request.EditCommentRequest;
 import com.michael.socialmedia.dto.response.ApiResponse;
 import com.michael.socialmedia.dto.response.CommentResponse;
 import com.michael.socialmedia.dto.response.EditCommentResponse;
 import com.michael.socialmedia.exceptions.CommentNotFoundException;
 import com.michael.socialmedia.exceptions.ResourceNotFoundException;
+import com.michael.socialmedia.exceptions.UserNotAuthenticated;
 import com.michael.socialmedia.repository.CommentRepository;
 import com.michael.socialmedia.repository.PostRepository;
+import com.michael.socialmedia.repository.UserRepository;
 import com.michael.socialmedia.service.CommentService;
+import com.michael.socialmedia.utils.EmailUtils;
 import com.michael.socialmedia.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -29,15 +34,21 @@ public class CommentServiceImpl implements CommentService {
 
     private  final CommentRepository commentRepository;
 
+    private final UserRepository userRepository;
+
     private final PostRepository postRepository;
 
     @Override
-    public CommentResponse createNewComment(CommentResponse commentResponse) {
-      Post post = postRepository.findById(commentResponse.getPostId())
+    public CommentResponse createNewComment(CommentRequest commentRequest) {
+      User user = userRepository.findByEmail(EmailUtils.getEmailFromContent())
+                .orElseThrow(()-> new UserNotAuthenticated("USER NOT AUTHENTICATED"));
+      Post post = postRepository.findById(commentRequest.getPostId())
               .orElseThrow(()-> new CommentNotFoundException("comment not found"));
-      Comment  comment = Mapper.mapToComment(post,commentResponse);
+      Comment  comment = Mapper.mapToComment(post,commentRequest);
+      comment.getPost().setUser(user);
+
       var newComment = commentRepository.save(comment);
-      return Mapper.mapToCommentResponse(newComment,post);
+      return Mapper.mapToCommentResponse(newComment);
     }
 
     @Override

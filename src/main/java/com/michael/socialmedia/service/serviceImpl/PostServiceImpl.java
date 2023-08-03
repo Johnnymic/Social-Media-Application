@@ -15,6 +15,8 @@ import com.michael.socialmedia.service.PostService;
 import com.michael.socialmedia.utils.EmailUtils;
 import com.michael.socialmedia.utils.Mapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +27,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
+
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
 
-    private  final UserRepository userRepository;
+    private final  UserRepository userRepository;
+
+    @Autowired
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public PostResponse createPost(PostRequest postRequest) {
-        System.out.println(EmailUtils.getEmailFromContent());
+
         User user = userRepository.findByEmail(EmailUtils.getEmailFromContent())
                 .orElseThrow(() -> new UserNotAuthenticated("please login"));
         Post post = mapToPost(postRequest);
@@ -60,9 +69,10 @@ public class PostServiceImpl implements PostService {
     public String deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->new ResourceNotFoundException("post not found"));
-        postRepository.delete(post);
+      postRepository.delete(post);
+        System.out.println(post);
 
-        return "post Successfully deleted";
+        return    " post Successfully deleted";
     }
 
     @Override
@@ -77,19 +87,24 @@ public class PostServiceImpl implements PostService {
                                 .build()).
                         collect(Collectors.toList());
         Collections.sort(postResponses, Comparator.comparing(PostResponse::getId,Collections.reverseOrder()));
-        int max= pageNo*pageSize;
-        int min = Math.min(pageSize * (pageNo+1),postResponses.size());
+        int min= pageNo*pageSize;
+        int max = Math.min(pageSize * (pageNo+1),postResponses.size());
         PageRequest pageRequest = PageRequest.of(pageNo,pageSize, Sort.Direction.DESC,sortBy);
-        return new PageImpl<>(postResponses.subList(max,min),pageRequest,postResponses.size());
+        return new PageImpl<>(postResponses.subList(min,max),pageRequest,postResponses.size());
     }
 
     @Override
     public EditPostResponse editPost(Long postId, EditPostRequest editPostResponse) {
+        User user = userRepository.findByEmail(EmailUtils.getEmailFromContent())
+                .orElseThrow(() -> new UserNotAuthenticated("please login"));
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new PostNotfoundException("post not found"));
         post.setContent(editPostResponse.getContent());
+        post.setUser(user);
+        postRepository.save(post);
         return Mapper.mapToEditPostResponse(post);
     }
+
 
 
 
@@ -106,4 +121,7 @@ public class PostServiceImpl implements PostService {
                 .content(postRequest.getContent())
                 .build();
     }
+
+
+
 }

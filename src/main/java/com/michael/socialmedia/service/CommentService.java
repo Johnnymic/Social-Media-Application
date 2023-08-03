@@ -1,5 +1,6 @@
 package com.michael.socialmedia.service;
 
+import com.michael.socialmedia.dto.request.CommentRequest;
 import com.michael.socialmedia.dto.request.EditCommentRequest;
 import com.michael.socialmedia.dto.response.CommentResponse;
 import com.michael.socialmedia.dto.response.EditCommentResponse;
@@ -9,7 +10,7 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import java.util.List;
 
 public interface CommentService {
-    CommentResponse createNewComment(CommentResponse comment);
+    CommentResponse createNewComment(CommentRequest comment);
 
     CommentResponse viewComment(Long commentId);
 

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LikeController {
 
-    private LikeService likeService;
+    private  final LikeService likeService;
 
    public ResponseEntity<ApiResponse<String>>likePost(@PathVariable("postId") Long postId, @RequestParam String userEmail){
        ApiResponse<String>  apiResponse = new ApiResponse<>(likeService.likePost(postId,userEmail));

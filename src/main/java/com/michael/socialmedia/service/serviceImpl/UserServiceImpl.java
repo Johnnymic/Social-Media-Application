@@ -1,5 +1,7 @@
 package com.michael.socialmedia.service.serviceImpl;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.michael.socialmedia.Config.CloudinaryConfig;
 import com.michael.socialmedia.domain.Comment;
 import com.michael.socialmedia.domain.Follow;
 import com.michael.socialmedia.domain.Post;
@@ -20,13 +22,18 @@ import com.michael.socialmedia.utils.Mapper;
 import com.michael.socialmedia.utils.UserPage;
 import com.michael.socialmedia.utils.UserSearchCriteria;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -41,15 +48,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserCriteriaRepository userCriteriaRepository;
 
+    private  final CloudinaryConfig cloudinaryConfig;
+
     @Override
     public EditUserProfileResponse editUserProfile(EditUserProfileRequest editUserProfileRequest) {
         User loginUser = userRepository.findByEmail(EmailUtils.getEmailFromContent())
                 .orElseThrow(()-> new UserNotAuthenticated("user not authenticated"));
-         loginUser.setEmail(editUserProfileRequest.getEmail());
-         loginUser.setPassword(editUserProfileRequest.getPassword());
-         loginUser.setUsername(editUserProfileRequest.getUsername());
-         loginUser.updatedAt();
-         userRepository.save(loginUser);
+          loginUser.setUsername(editUserProfileRequest.getUsername());
+          loginUser.setProfilePic(editUserProfileRequest.getProfilePic());
+          userRepository.save(loginUser);
        return   Mapper.mapToEditProfileResponse(loginUser);
     }
 
@@ -133,6 +140,46 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> filterAndSearch(UserPage userPage,UserSearchCriteria userSearchCriteria) {
       return  userCriteriaRepository.findAllUserWithFilter(userPage,userSearchCriteria);
+
+    }
+
+    @Override
+    public Object uploadProfilePic(MultipartFile multipartFile) throws IOException {
+        User user = userRepository.findByEmail(EmailUtils.getEmailFromContent())
+                .orElseThrow(()-> new ResourceNotFoundException("user id not found"));
+        String userProfilePid = uploadProfileImage(multipartFile);
+        user.setProfilePic(userProfilePid);
+        userRepository.save(user);
+        return multipartFile;
+    }
+
+    private String uploadProfileImage(MultipartFile multipartFile) throws IOException {
+         File file= convertToMultipartFile(multipartFile);
+         try {
+             Map uploadResult = cloudinaryConfig.cloudinary().uploader().upload(file, ObjectUtils.asMap("use_file_name", true, "unique_fileName", true));
+             boolean isFileDeleted = file.delete();
+             if (isFileDeleted) {
+                 log.info("File successfully deleted");
+             } else
+                 log.info("File doesn't exist");
+          return    uploadResult.get("url").toString();
+         }catch (IOException e){
+             throw  new IOException(e);
+         }
+
+
+    }
+
+    private File convertToMultipartFile(MultipartFile multipartFile) throws IOException {
+        String file = multipartFile.getOriginalFilename();
+        if(file==null){
+            throw  new AssertionError();
+        }
+        File FileReaderConverter = new File(file);
+        FileOutputStream fileOutputStream = new FileOutputStream(FileReaderConverter);
+        fileOutputStream.write(multipartFile.getBytes());
+        fileOutputStream.close();
+        return FileReaderConverter;
 
     }
 
