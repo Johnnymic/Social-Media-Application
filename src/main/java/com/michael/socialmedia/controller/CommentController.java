@@ -33,7 +33,7 @@ public class CommentController {
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
 
     }
-    @GetMapping("/view/comment/{commentId}")
+    @GetMapping("/view/comment")
     public ResponseEntity<ApiResponse<List<CommentResponse>>>viewAllComment(){
         ApiResponse<List<CommentResponse>> apiResponse = new ApiResponse<>(commentService.viewAllComment());
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);

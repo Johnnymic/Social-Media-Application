@@ -14,4 +14,8 @@ public interface UserService {
    List<UserProfileResponse> viewAllUserProfile();
 
     String  deleteUserProfile(Long userId);
+
+    String toggleFollow(String followerUser, String followingUser);
+
+
 }

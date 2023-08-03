@@ -35,10 +35,9 @@ public class User extends BaseEntity implements UserDetails {
     private Set<Post> post;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Follower> followers = new ArrayList<>();
+    private Set<Follow> followers = new HashSet<>();
 
-    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-    private List<Follower> following = new ArrayList<>();
+
 
 
     @Enumerated(EnumType.STRING)

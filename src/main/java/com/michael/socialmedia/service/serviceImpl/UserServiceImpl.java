@@ -1,11 +1,13 @@
 package com.michael.socialmedia.service.serviceImpl;
 
+import com.michael.socialmedia.domain.Follow;
 import com.michael.socialmedia.domain.User;
 import com.michael.socialmedia.dto.request.EditUserProfileRequest;
 import com.michael.socialmedia.dto.response.EditUserProfileResponse;
 import com.michael.socialmedia.dto.response.UserProfileResponse;
 import com.michael.socialmedia.exceptions.ResourceNotFoundException;
 import com.michael.socialmedia.exceptions.UserNotAuthenticated;
+import com.michael.socialmedia.repository.FollowerRepository;
 import com.michael.socialmedia.repository.UserRepository;
 import com.michael.socialmedia.service.UserService;
 import com.michael.socialmedia.utils.EmailUtils;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+
+    private  final FollowerRepository followerRepository;
 
 
     @Override
@@ -57,6 +62,34 @@ public class UserServiceImpl implements UserService {
            userRepository.delete(user);
            return "user profile deleted successful";
     }
+
+    @Override
+    public String toggleFollow(String followerEmail, String followingEmail) {
+        User followerUser = userRepository.findByEmail(followerEmail)
+                .orElseThrow(()-> new UserNotAuthenticated("user not login inr"));
+        User followingUser= userRepository.existsByEmail(followingEmail);
+        if(followingUser== null){
+            throw new IllegalArgumentException("User to follow not found");
+
+        }
+        Follow follower = followerRepository.findByFollowerAndFollowing(followerUser,followingUser);
+
+        if(follower!=null){
+            followerRepository.delete(follower);
+            return "User unfollowed successfully";
+        }
+        else {
+            Follow newFollow = new Follow();
+            newFollow.setFollower(followerUser);
+            newFollow.setFollowing(followingUser);
+            followerRepository.save(newFollow); // Save the new follow relationship
+            return "User followed successfully";
+        }
+
+    }
+
+
+
 
     public UserProfileResponse mapToUserProfile(User user) {
         return  UserProfileResponse.builder()

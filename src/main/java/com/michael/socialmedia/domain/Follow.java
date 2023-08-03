@@ -3,29 +3,27 @@ package com.michael.socialmedia.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 
 @Getter
 @Setter
-@Builder
+
 @Table(name = "appUser")
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-public class Follower {
+
+public class Follow  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
      @ManyToOne
      @JoinColumn(name = "user_id")
-     private  User user;
+     private  User following;
 
     @ManyToOne
     @JoinColumn(name = "follower_id")
     private User follower;
+
 
 
 }

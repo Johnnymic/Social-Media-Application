@@ -8,6 +8,7 @@ import com.michael.socialmedia.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +46,16 @@ public class UserController {
       ApiResponse<String> apiResponse = new ApiResponse<>(userService.deleteUserProfile(userId));
       return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
   }
+
+  @PostMapping("/{followerEmail}/follower/{followingEmail}")
+   public ResponseEntity<ApiResponse<String>> followerUser(@PathVariable("followerEmail") String followerUser, @PathVariable("followingEmail") String followingUser){
+      ApiResponse<String>apiResponse = new ApiResponse<>(userService.toggleFollow(followerUser,followingUser));
+      return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
+  }
+
+
+
+
 
 
 

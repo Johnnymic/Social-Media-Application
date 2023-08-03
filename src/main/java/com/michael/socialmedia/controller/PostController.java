@@ -3,6 +3,7 @@ package com.michael.socialmedia.controller;
 import com.michael.socialmedia.dto.request.EditPostRequest;
 import com.michael.socialmedia.dto.request.PostRequest;
 import com.michael.socialmedia.dto.response.ApiResponse;
+import com.michael.socialmedia.dto.response.EditPostResponse;
 import com.michael.socialmedia.dto.response.PostResponse;
 import com.michael.socialmedia.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -37,13 +38,13 @@ public class PostController {
         ApiResponse <List<PostResponse>> apiResponse = new ApiResponse<>(postService.viewAllPost());
         return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
-    @PutMapping("/edit/post")
-    public ResponseEntity<ApiResponse<EditPostRequest>>editPost(@PathVariable("postId")Long postId, @RequestBody EditPostRequest editPostRequest){
-        ApiResponse<EditPostRequest> apiResponse = new ApiResponse<>(postService.editPost(postId,editPostRequest));
+    @PutMapping("/edit/post/{postId}")
+    public ResponseEntity<ApiResponse<EditPostResponse>>editPost(@PathVariable("postId")Long postId, @RequestBody EditPostRequest editPostRequest){
+        ApiResponse<EditPostResponse> apiResponse = new ApiResponse<>(postService.editPost(postId,editPostRequest));
         return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/post")
+    @DeleteMapping("/delete/post/{postId}")
     public ResponseEntity<ApiResponse<String>>deletePost(@PathVariable("postId")Long postId){
         ApiResponse <String> apiResponse = new ApiResponse<>(postService.deletePost(postId));
         return new ResponseEntity<>(apiResponse,HttpStatus.OK);

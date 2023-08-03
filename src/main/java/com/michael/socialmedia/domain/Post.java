@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 @Getter
@@ -25,7 +26,8 @@ public class Post extends  BaseEntity{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "post")
+    private Set<Like> likes = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
