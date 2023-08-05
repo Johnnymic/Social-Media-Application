@@ -139,8 +139,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String removeCommentFromPost(Long commentId, Long postId) {
+        User user = userRepository.findByEmail(EmailUtils.getEmailFromContent())
+                .orElseThrow(()-> new UserNotAuthenticated("please login "));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotfoundException("Post not found"));
+        post.setUser(user);
         Comment comment = post.getComments().stream()
                 .filter(comment1 -> comment1.getId().equals(commentId))
                 .findFirst().orElseThrow(()-> new CommentNotFoundException("comment not found"));

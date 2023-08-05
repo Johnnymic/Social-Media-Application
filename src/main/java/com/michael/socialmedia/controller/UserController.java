@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -77,14 +78,15 @@ public class UserController {
       return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
   }
 
-  @PostMapping("/comment/{commentId}/remove/post/{postId}")
+  @GetMapping("/comment/{commentId}/remove/post/{postId}")
   public ResponseEntity<ApiResponse<String>> removeCommentFromPost(@PathVariable("commentId") Long commentId, @PathVariable("postId") Long postId){
       ApiResponse<String>apiResponse = new ApiResponse<>(userService.removeCommentFromPost(commentId,postId));
       return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
   }
 
+
   @GetMapping("/filter/search")
-  public  ResponseEntity<ApiResponse <Page<User>>>filterAllUser(UserPage userPage, UserSearchCriteria userSearchCriteria){
+  public  ResponseEntity<ApiResponse <Page<User>>>filterAllUser(@RequestParam UserPage userPage, UserSearchCriteria userSearchCriteria){
 
       ApiResponse<Page<User>> apiResponse =new ApiResponse<>(userService.filterAndSearch(userPage,userSearchCriteria));
 
