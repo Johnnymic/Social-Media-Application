@@ -51,7 +51,8 @@ public class LikeServiceImpl implements LikeService {
         Like newLike = new Like();
         newLike.setPost(post);
         newLike.setUser(user);
-        post.setLikeCount(post.getLikeCount() + 1);
+      post.setLikeCount(post.getLikeCount() + 1);
+
         likeRepository.save(newLike);
         return  "user has like the post";
 

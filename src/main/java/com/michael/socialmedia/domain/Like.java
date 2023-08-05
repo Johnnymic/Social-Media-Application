@@ -20,4 +20,5 @@ public class Like {
 
     @ManyToOne
     private Post post;
+
 }

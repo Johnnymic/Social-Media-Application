@@ -86,7 +86,7 @@ public class UserController {
 
 
   @GetMapping("/filter/search")
-  public  ResponseEntity<ApiResponse <Page<User>>>filterAllUser(@RequestParam UserPage userPage, UserSearchCriteria userSearchCriteria){
+  public  ResponseEntity<ApiResponse <Page<User>>>filterAllUser( UserPage userPage, UserSearchCriteria userSearchCriteria){
 
       ApiResponse<Page<User>> apiResponse =new ApiResponse<>(userService.filterAndSearch(userPage,userSearchCriteria));
 

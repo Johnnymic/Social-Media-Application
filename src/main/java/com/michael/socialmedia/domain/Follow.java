@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-
+@EqualsAndHashCode
 @Table(name = "follower")
 @Entity
 @NoArgsConstructor
@@ -25,18 +25,6 @@ public class Follow  {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "following_user_id")
     private User following;
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Follow)) return false;
-        Follow follow = (Follow) o;
-        return Objects.equals(getFollower(), follow.getFollower()) &&
-                Objects.equals(getFollowing(), follow.getFollowing());
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(getFollower(), getFollowing());
-    }
 
 
 

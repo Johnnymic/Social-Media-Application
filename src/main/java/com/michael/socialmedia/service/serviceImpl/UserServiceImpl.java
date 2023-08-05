@@ -11,10 +11,7 @@ import com.michael.socialmedia.dto.request.EditUserProfileRequest;
 import com.michael.socialmedia.dto.response.CommentOnPostResponse;
 import com.michael.socialmedia.dto.response.EditUserProfileResponse;
 import com.michael.socialmedia.dto.response.UserProfileResponse;
-import com.michael.socialmedia.exceptions.CommentNotFoundException;
-import com.michael.socialmedia.exceptions.PostNotfoundException;
-import com.michael.socialmedia.exceptions.ResourceNotFoundException;
-import com.michael.socialmedia.exceptions.UserNotAuthenticated;
+import com.michael.socialmedia.exceptions.*;
 import com.michael.socialmedia.repository.*;
 import com.michael.socialmedia.service.UserService;
 import com.michael.socialmedia.utils.EmailUtils;
@@ -87,10 +84,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public String toggleFollow(Long followerEmailId, Long followingEmailId) {
-        User followerUser = userRepository.findByEmailAndId(EmailUtils.getEmailFromContent(),followerEmailId);
+        User followerUser = userRepository.findByEmailAndId(EmailUtils.getEmailFromContent(),followerEmailId)
+                .orElseThrow(()-> new FollowUserNotFound(" followed user not found with the Id"));
 
-        User followingUser = userRepository.findByEmailAndId(EmailUtils.getEmailFromContent(),followingEmailId);
-
+        User followingUser = userRepository.findByEmailAndId(EmailUtils.getEmailFromContent(),followingEmailId)
+                .orElseThrow(()-> new FollowUserNotFound(" followed user not found with the Id"));
 
         if(followingUser== null){
             throw new IllegalArgumentException("User to follow not found");

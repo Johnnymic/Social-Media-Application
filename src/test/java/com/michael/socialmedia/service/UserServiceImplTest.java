@@ -109,8 +109,8 @@ class UserServiceImplTest {
         follower.setFollower(followerUser);
         follower.setFollowing(followingUser);
 
-        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followerEmailId))).thenReturn(followerUser);
-        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followingEmailId))).thenReturn(followingUser);
+        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followerEmailId))).thenReturn(Optional.of(followerUser));
+        when(userRepository.findByEmailAndId(eq(emailFromContent), eq(followingEmailId))).thenReturn(Optional.of(followingUser));
         when(followerRepository.findByFollowerAndFollowing(any(User.class), any(User.class))).thenReturn(follower);
 
         // Act

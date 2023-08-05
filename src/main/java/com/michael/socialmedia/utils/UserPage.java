@@ -7,13 +7,13 @@ import org.springframework.data.domain.Sort;
 @Setter
 public class UserPage {
 
-    private  int pageNo=0;
+    public   int pageNo=0;
 
-    private  int pageSize= 10;
+    public   int pageSize= 10;
 
-    private Sort.Direction sortDir = Sort.Direction.ASC;
+    public Sort.Direction sortDir = Sort.Direction.ASC;
 
-    private  String sortBy = "username";
+    public   String sortBy = "username";
 
 
 }
