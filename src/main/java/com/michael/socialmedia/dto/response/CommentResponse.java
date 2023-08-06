@@ -13,6 +13,8 @@ import java.util.List;
 @Builder
 public class CommentResponse {
 
+    private Long commentId;
+
     private Long postId;
 
     private String comment;

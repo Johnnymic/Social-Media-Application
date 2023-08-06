@@ -68,12 +68,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public EditCommentResponse editComment(Long commentId, EditCommentRequest comment) {
+        User user = userRepository.findByEmail(EmailUtils.getEmailFromContent())
+                .orElseThrow(()-> new UserNotAuthenticated("USER NOT AUTHENTICATED"));
         Comment editComment =commentRepository.findById(commentId)
                 .orElseThrow(()-> new CommentNotFoundException("comment not found"));
         editComment.setContent(comment.getContent());
-       var newEditComment = commentRepository.save(editComment);
+        editComment.getPost().setUser(user);
+         commentRepository.save(editComment);
         return EditCommentResponse.builder()
-                .comment(newEditComment)
+                .comment(editComment.getContent())
                 .build();
     }
 

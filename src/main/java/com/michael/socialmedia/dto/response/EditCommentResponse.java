@@ -10,5 +10,5 @@ import lombok.Getter;
 @Getter
 public class EditCommentResponse {
 
-    private Comment comment;
+    private String comment;
 }

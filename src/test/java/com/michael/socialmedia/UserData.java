@@ -24,10 +24,10 @@ public class UserData {
                 .build();
     }
 
-    public static LoginRequest buildUserLoginRequest() {
+    public static LoginRequest buildLoginRequest() {
         return LoginRequest.builder()
-                .email("jeffHardy")
-                .password("1234")
+                .email("jeffHardy@gamil.com")
+                .password("password123")
                 .build();
     }
 

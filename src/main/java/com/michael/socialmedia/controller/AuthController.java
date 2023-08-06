@@ -5,6 +5,7 @@ import com.michael.socialmedia.dto.request.RegisterRequest;
 import com.michael.socialmedia.dto.response.ApiResponse;
 import com.michael.socialmedia.dto.response.LoginResponse;
 import com.michael.socialmedia.dto.response.RegisterResponse;
+import com.michael.socialmedia.exceptions.UserNotFoundException;
 import com.michael.socialmedia.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopInfrastructureBean;
@@ -30,11 +31,17 @@ public class AuthController {
     }
 
     @PostMapping("/login/user")
-   private ResponseEntity<ApiResponse<LoginResponse>> loginUser(@RequestBody LoginRequest loginRequest){
-        ApiResponse<LoginResponse> apiResponse = new ApiResponse<>(authenticationService.loginUser(loginRequest));
-        return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
-
+    public ResponseEntity<ApiResponse<LoginResponse>> loginUser(@RequestBody LoginRequest loginRequest) {
+        try {
+            LoginResponse loginResponse = authenticationService.loginUser(loginRequest);
+            ApiResponse<LoginResponse> apiResponse = new ApiResponse<>(loginResponse);
+            return ResponseEntity.ok(apiResponse);
+        } catch (UserNotFoundException e) {
+            ApiResponse<LoginResponse> errorResponse = new ApiResponse<>("User not found", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
+
 
 
 }

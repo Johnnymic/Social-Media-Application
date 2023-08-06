@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,6 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findByEmail(EmailUtils.getEmailFromContent())
                 .orElseThrow(() -> new UserNotAuthenticated("please login"));
         Post post = mapToPost(postRequest);
-        post.setUser(user);
         var newPost = postRepository.save(post);
         return mapToPostResponse(newPost);
     }
@@ -68,12 +68,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public String deletePost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new ResourceNotFoundException("post not found"));
-      postRepository.delete(post);
+                .orElseThrow(() -> new ResourceNotFoundException("post not found"));
+        postRepository.delete(post);
         System.out.println(post);
 
-        return    " post Successfully deleted";
+        return "Post Successfully deleted";
     }
+
 
     @Override
     public Page<PostResponse> viewPaginatedPost(Integer pageNo, Integer pageSize, String sortBy, boolean isAscending) {

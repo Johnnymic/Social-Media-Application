@@ -56,7 +56,7 @@ public class CommentController {
 
     }
 
-    @GetMapping
+    @GetMapping("/view/all/comment/paginated")
     public ResponseEntity<ApiResponse<Page<CommentResponse>>>viewAllCommentByPagination(
             @RequestParam(defaultValue = "0") Integer pageNo,
             @RequestParam(defaultValue = "16") Integer pageSize,

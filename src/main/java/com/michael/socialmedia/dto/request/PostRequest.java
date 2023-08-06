@@ -9,7 +9,8 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 
 import java.util.ArrayList;
- import java.util.List;
+import java.util.Date;
+import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -22,6 +23,8 @@ public class PostRequest {
     private String Content;
 
     private  int likeCount;
+    ;
+    private Date createAt;
 
     private  User user;
 

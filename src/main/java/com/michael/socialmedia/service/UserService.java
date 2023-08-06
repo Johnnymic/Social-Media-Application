@@ -23,7 +23,7 @@ public interface UserService {
 
     String  deleteUserProfile(Long userId);
 
-    String toggleFollow(String followerUser, String followingUser);
+    String toggleFollow(Long followerUserId, Long followingUserId);
 
 
     CommentOnPostResponse commentOnPost(CommentOnPostRequest comment);

@@ -84,10 +84,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String toggleFollow(String followerEmail, String followingEmail) {
-        User followerUser = userRepository.findByEmail(followerEmail)
-                .orElseThrow(()-> new UserNotAuthenticated("user not login inr"));
-        User followingUser= userRepository.existsByEmail(followingEmail);
+    public String toggleFollow(Long followerEmailId, Long followingEmailId) {
+        User followerUser = userRepository.findByEmailAndId(EmailUtils.getEmailFromContent(),followerEmailId);
+
+        User followingUser = userRepository.findByEmailAndId(EmailUtils.getEmailFromContent(),followingEmailId);
+
+
         if(followingUser== null){
             throw new IllegalArgumentException("User to follow not found");
 
@@ -101,7 +103,10 @@ public class UserServiceImpl implements UserService {
         else {
             Follow newFollow = new Follow();
             newFollow.setFollower(followerUser);
+
             newFollow.setFollowing(followingUser);
+            userRepository.save(followerUser);
+            userRepository.save(followingUser);
             followerRepository.save(newFollow); // Save the new follow relationship
             return "User followed successfully";
         }
@@ -118,6 +123,7 @@ public class UserServiceImpl implements UserService {
         commentPost.setContent(comment.getCommentContent());
         commentPost.setUser(loginUser);
         existingPost.getComments().add(commentPost);
+        existingPost.setId(existingPost.getId());
         postRepository.save(existingPost);
       var newComment=  commentRepository.save(commentPost);
         return CommentOnPostResponse.builder()

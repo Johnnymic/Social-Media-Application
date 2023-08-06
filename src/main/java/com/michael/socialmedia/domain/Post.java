@@ -3,10 +3,8 @@ package com.michael.socialmedia.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,6 +21,8 @@ public class Post extends  BaseEntity{
 
     private  int likeCount;
 
+
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
@@ -32,4 +32,9 @@ public class Post extends  BaseEntity{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private  User user;
+
+    public Post(Long id,String content) {
+        this.id =id;
+        this.content = content;
+    }
 }

@@ -65,9 +65,9 @@ public class UserController {
       return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
   }
 
-  @PostMapping("/{followerEmail}/follower/{followingEmail}")
-   public ResponseEntity<ApiResponse<String>> followerUser(@PathVariable("followerEmail") String followerUser, @PathVariable("followingEmail") String followingUser){
-      ApiResponse<String>apiResponse = new ApiResponse<>(userService.toggleFollow(followerUser,followingUser));
+  @GetMapping("/{followerEmail}/follower/{followingEmail}")
+   public ResponseEntity<ApiResponse<String>> followerUser(@PathVariable("followerEmail") Long followerUserid, @PathVariable("followingEmail") Long followingUserId){
+      ApiResponse<String>apiResponse = new ApiResponse<>(userService.toggleFollow(followerUserid,followingUserId));
       return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
   }
 
